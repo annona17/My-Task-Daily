@@ -74,7 +74,6 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
       color: state.color.value,
     );
     saveTask();
-
     navigatorKey.currentState!.pop();
 
     final homeBloc = BlocProvider.of<HomeBloc>(navigatorKey.currentState!.context);

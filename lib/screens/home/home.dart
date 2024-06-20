@@ -17,7 +17,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: BlocProvider(
-        create: (context) => HomeBloc()..add(HomeLoadTasks()),
+        create: (context) =>
+        HomeBloc()..add(const HomeLoadTasks()),
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             final homeBloc = context.read<HomeBloc>();
@@ -47,40 +48,39 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
+                child: Column(children: [
+                  const SizedBox(height: 10),
+                  const Row(
                     children: [
-                      const SizedBox(height: 10),
-                      const Row(
-                        children: [
-                          Text("Today", style: TextStyle(
+                      Text("Today",
+                          style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
-                          Spacer(),
-                          ViewDropdown(),
-                        ],
-                      ),
-
-                      Expanded(
-                        child: state is HomeLoadTasks && state.tasks.isNotEmpty
-                            ? ListView.builder(
-                            itemCount: state.tasks.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: TaskCard(task: state.tasks[index]),
-                              );
-                            },
-                        )
-                            : Center(child: Text("Empty")),
-                      ),
-                    ]
-                ),
+                      Spacer(),
+                      ViewDropdown(),
+                    ],
+                  ),
+                  Expanded(
+                    child: state.tasks.isNotEmpty
+                        ? ListView.builder(
+                      itemCount: state.tasks.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TaskCard(
+                              task: state.tasks[index], bloc: homeBloc),
+                        );
+                      },
+                    )
+                        : const Center(child: Text("Empty")),
+                  ),
+                ]),
               ),
               floatingActionButton: FloatingActionButton(
                   child: const Icon(Icons.add),
                   onPressed: () {
                     homeBloc.add(HomeAddTask());
-                  }
-              ),
+                    homeBloc.add(HomeLoadTasks());
+                  }),
               floatingActionButtonLocation: FloatingActionButtonLocation
                   .endFloat, // This line positions the button at the bottom right corner.
             );

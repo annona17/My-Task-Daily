@@ -24,7 +24,6 @@ final class HomeState extends Equatable {
     );
   }
 
-
   @override
   List<Object?> get props => [tasks, status, filter, lastDeteledTask];
   HomeState copyWith({

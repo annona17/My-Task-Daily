@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../../../bloc/home/home_bloc.dart';
 import '../../../data/model/task.dart';
 
 class TaskCard extends StatelessWidget {
   final Task task;
-  const TaskCard({super.key, required this.task});
+  final HomeBloc bloc;
+  const TaskCard({super.key, required this.task, required this.bloc});
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: const ValueKey("Task"),
+      key: const ValueKey("task"),
       onDismissed: (direction) {
-        // Remove the item from the data source.
+        bloc.add(HomeDeleteTask(task));
       },
       background: Container(
         color: Colors.red[300],
@@ -26,11 +28,17 @@ class TaskCard extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
-                title: Text(task.title),
-                subtitle: Text(task.description),
+                title: Text(task.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text(task.description, style: const TextStyle(fontStyle: FontStyle.italic)),
                 trailing: Checkbox(
-                  value: false,
-                  onChanged: (bool? value) {},
+                  value: task.status == "Active"? false : true,
+                  onChanged: (bool? value) {
+                    if (value == true) {
+                      bloc.add(HomeCompleteTask(task));
+                    } else {
+                      bloc.add(HomeUndoComplete(task));
+                    }
+                  },
                 ),
               ),
               Padding(
@@ -38,14 +46,20 @@ class TaskCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      color: Colors.deepPurple[100],
                       padding: const EdgeInsets.all(15),
-                        child: Text(task.priority),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple[100],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(task.priority.toString().split('.').last),
                     ),
                     const SizedBox(width: 10),
                     Container(
-                      color: Colors.deepPurple[100],
                       padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple[100],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: Row(
                         children: [
                           const Icon(Icons.timer_outlined),

@@ -37,6 +37,12 @@ final class HomeCompleteTask extends HomeEvent {
   @override
   List<Object> get props => [task];
 }
+final class HomeUndoComplete extends HomeEvent {
+  final Task task;
+  const HomeUndoComplete(this.task);
+  @override
+  List<Object> get props => [task];
+}
 
 final class HomeUndoDelete extends HomeEvent {
   final Task task;

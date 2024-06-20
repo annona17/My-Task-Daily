@@ -18,6 +18,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeUpdateTask>(_onUpdateTask);
     on<HomeChangeFilter>(_onChangeFilter);
     on<HomeCompleteTask>(_onCompleteTask);
+    on<HomeUndoComplete>(_onUndoComplete);
     on<HomeUndoDelete>(_onUndoDelete);
     on<HomeAddTask>(_onAddTask);
     //on<HomeReloadTask>(_onLoadTasks as EventHandler<HomeReloadTask, HomeState>);
@@ -25,7 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<FutureOr<void>> _onLoadTasks(HomeLoadTasks event, Emitter<HomeState> emit) async {
     emit(state.copyWith(status: TaskStatus.loading));
     try {
-      final taskBox;
+      final Box<Task> taskBox;
       if (Hive.isBoxOpen('tasks')) {
         taskBox = Hive.box<Task>('tasks');
       } else {
@@ -56,8 +57,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
   FutureOr<void> _onCompleteTask(HomeCompleteTask event, Emitter<HomeState> emit) async {
     final task = event.task;
-    task.status = 'completed';
     await task.complete();
+    await task.save();
+    final tasks = state.tasks.map((e) => e.id == task.id ? task : e).toList();
+    emit(state.copyWith(tasks: tasks));
+  }
+  FutureOr<void> _onUndoComplete(HomeUndoComplete event, Emitter<HomeState> emit) async {
+    final task = event.task;
+    await task.undoCompleted();
+    await task.save();
     final tasks = state.tasks.map((e) => e.id == task.id ? task : e).toList();
     emit(state.copyWith(tasks: tasks));
   }
@@ -73,4 +81,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     navigatorKey.currentState!.pushNamed('/add_task');
   }
 }
+
+
 

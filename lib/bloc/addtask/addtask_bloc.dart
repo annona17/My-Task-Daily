@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:todoapp/data/model/task.dart';
 
 import '../../main.dart';
 import '../../screens/add_task/widget/priority_choice.dart';
+import '../home/home_bloc.dart';
 
 part 'addtask_event.dart';
 part 'addtask_state.dart';
@@ -72,7 +74,12 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
       color: state.color.value,
     );
     saveTask();
+
     navigatorKey.currentState!.pop();
+
+    final homeBloc = BlocProvider.of<HomeBloc>(navigatorKey.currentState!.context);
+    homeBloc.add(HomeLoadTasks());
+
     emit(state.copyWith(task: _task));
   }
 

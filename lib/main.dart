@@ -24,7 +24,7 @@ Future <void> main() async {
       startTime: "08:00",
       endTime: "10:00",
       priority: "high",
-      color: Colors.red.value,
+      color: Colors.red.withOpacity(0.5).value,
     );
     var task2 = Task(
       title: 'Task 2',
@@ -33,7 +33,7 @@ Future <void> main() async {
       startTime: "10:00",
       endTime: "12:00",
       priority: "medium",
-      color: Colors.green.value,
+      color: Colors.green.withOpacity(0.5).value,
     );
     var task3 = Task(
       title: 'Task 3',
@@ -42,7 +42,7 @@ Future <void> main() async {
       startTime: "14:00",
       endTime: "16:00",
       priority: "low",
-      color: Colors.blue.value,
+      color: Colors.blue.withOpacity(0.5).value,
     );
 
     await box.add(task1);

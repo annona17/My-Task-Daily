@@ -18,13 +18,14 @@ class ColorTask extends StatelessWidget {
             spacing: 10,
             runSpacing: 10,
             children: Colors.primaries.map((Color color) {
+              Color lighterColor = color.withOpacity(0.5);
               return FilterChip(
                 label: const Text(" "),
-                backgroundColor: color,
-                selected: bloc.state.color == color,
-                selectedColor: color,
+                backgroundColor: lighterColor,
+                selected: bloc.state.color == lighterColor,
+                selectedColor: lighterColor,
                 onSelected: (bool selected) {
-                  bloc.add(AddTaskChangeColor(color));
+                  bloc.add(AddTaskChangeColor(lighterColor));
                 },
               );
             }).toList(),

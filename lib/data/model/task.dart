@@ -35,6 +35,17 @@ class Task {
     required this.color,
   });
 
+  Task.from(Task other)
+    : this (
+      title: other.title,
+      description: other.description,
+      date: other.date,
+      startTime: other.startTime,
+      endTime: other.endTime,
+      priority: other.priority,
+      color: other.color,
+    );
+
   TimeOfDay get startTimeOfDay {
     List<String> time = startTime.split(":");
     return TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1]));
@@ -64,7 +75,11 @@ class Task {
   }
 
   save() {
-    Hive.box<Task>("task").add(this);
+    Hive.box<Task>("tasks").add(this);
+  }
+
+  undoCompleted() {
+    status = "Active";
   }
 
 }

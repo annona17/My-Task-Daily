@@ -79,7 +79,7 @@ class _AddTaskState extends State<AddTask> {
                           width: MediaQuery.of(context).size.width * 2 / 3,
                           child: ElevatedButton(
                             onPressed: () {
-                              bloc.add(AddTaskCreate());
+                              bloc.add(AddTaskCreate(context));
                             },
                             child: const Text('Create Task'),
                           ),

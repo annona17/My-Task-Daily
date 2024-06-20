@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:todoapp/screens/home/home.dart';
 import 'bloc/addtask/addtask_bloc.dart';
+import 'bloc/home/home_bloc.dart';
 import 'data/model/task.dart';
 import 'screens/add_task/add_task.dart';
 
@@ -67,7 +68,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: BlocProvider(
-        create: (context) => AddTaskBloc() ,
+        create: (context) => HomeBloc()..add(const HomeLoadTasks()) ,
         child: const MyHomePage(),
       ),
       routes: {

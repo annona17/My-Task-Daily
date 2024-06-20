@@ -10,6 +10,7 @@ class AddTaskState extends Equatable{
   final String priority;
   final String status;
   final Color color;
+  final bool isCompleted;
 
   const AddTaskState({
     required this.title,
@@ -20,6 +21,7 @@ class AddTaskState extends Equatable{
     required this.priority,
     required this.status,
     required this.color,
+    required this.isCompleted
   });
 
   factory AddTaskState.initial() {
@@ -32,6 +34,7 @@ class AddTaskState extends Equatable{
       priority: 'Low',
       status: 'future',
       color: Colors.purple,
+      isCompleted: false
     );
   }
 
@@ -48,6 +51,7 @@ class AddTaskState extends Equatable{
     String? status,
     Color? color,
     Task? task,
+    bool? isCompleted
   }) {
     return AddTaskState(
       title: tittle ?? this.title,
@@ -58,6 +62,7 @@ class AddTaskState extends Equatable{
       priority: priority ?? this.priority,
       status: status ?? this.status,
       color: color ?? this.color,
+      isCompleted: isCompleted ?? this.isCompleted
     );
   }
 }

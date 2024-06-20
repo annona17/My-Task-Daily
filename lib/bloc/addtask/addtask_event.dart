@@ -50,7 +50,8 @@ final class AddTaskChangeColor extends AddTaskEvent {
   List<Object> get props => [color];
 }
 class AddTaskCreate extends AddTaskEvent {
-  const AddTaskCreate();
+  final BuildContext context;
+  const AddTaskCreate(this.context);
   @override
-  List<Object> get props => [];
+  List<Object> get props => [context];
 }

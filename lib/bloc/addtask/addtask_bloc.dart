@@ -76,10 +76,10 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
     saveTask();
     navigatorKey.currentState!.pop();
 
-    final homeBloc = BlocProvider.of<HomeBloc>(navigatorKey.currentState!.context);
+    final homeBloc = BlocProvider.of<HomeBloc>(event.context);
     homeBloc.add(HomeLoadTasks());
 
-    emit(state.copyWith(task: _task));
+    emit(state.copyWith(task: _task, isCompleted: true));
   }
 
   // luu vao hive

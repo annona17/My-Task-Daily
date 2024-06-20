@@ -51,7 +51,18 @@ Future <void> main() async {
     await box.add(task3);
 
   }
-  runApp(const MyApp());
+  runApp(
+      MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => HomeBloc()..add(const HomeLoadTasks()),
+            ),
+            BlocProvider(
+              create: (context) => AddTaskBloc(),
+            ),
+          ],
+          child: MyApp())
+  );
 }
 final navigatorKey = GlobalKey<NavigatorState>();
 class MyApp extends StatelessWidget {
@@ -67,15 +78,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: BlocProvider(
-        create: (context) => HomeBloc()..add(const HomeLoadTasks()) ,
-        child: const MyHomePage(),
-      ),
+      home: const MyHomePage(),
       routes: {
-        '/add_task': (context) => BlocProvider(
-          create: (context) => AddTaskBloc(),
-          child: const AddTask(),
-        ),
+        '/add_task': (context) => const AddTask(),
       },
     );
   }

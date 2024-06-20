@@ -58,14 +58,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> _onCompleteTask(HomeCompleteTask event, Emitter<HomeState> emit) async {
     final task = event.task;
     await task.complete();
-    await task.save();
+    //await task.save();
     final tasks = state.tasks.map((e) => e.id == task.id ? task : e).toList();
     emit(state.copyWith(tasks: tasks));
   }
   FutureOr<void> _onUndoComplete(HomeUndoComplete event, Emitter<HomeState> emit) async {
     final task = event.task;
     await task.undoCompleted();
-    await task.save();
+    // await task.save();
     final tasks = state.tasks.map((e) => e.id == task.id ? task : e).toList();
     emit(state.copyWith(tasks: tasks));
   }

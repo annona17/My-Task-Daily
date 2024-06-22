@@ -42,7 +42,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> _onChangeDate(HomeChangeDate event, Emitter<HomeState> emit) async {
     emit(state.copyWith(date: event.date));
     List<Task> tasks = await getTasksByDate(event.date);
-    emit(state.copyWith(tasks: tasks));
+    tasks = await getTaskByFilter(state.filter, tasks);
+    emit(state.copyWith(tasks: tasks, date: event.date));
   }
   Future<List<Task>> getTasksByDate(DateTime date) async {
     final tasks = Hive.box<Task>('tasks').values.toList();
@@ -71,10 +72,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
   FutureOr<void> _onChangeFilter(HomeChangeFilter event, Emitter<HomeState> emit) async {
     emit(state.copyWith(filter: event.filter));
+    List<Task> tasks = await getTasksByDate(state.date);
+    tasks = await getTaskByFilter(event.filter, tasks);
+    emit(state.copyWith(tasks: tasks, filter: event.filter));
   }
-  // Future<List<Task>> getTaskByFilter(ViewFilter filter){
-  //
-  // }
+  Future<List<Task>> getTaskByFilter(ViewFilter filter, List<Task> tasks) async {
+    switch (filter) {
+      case ViewFilter.Active:
+        return tasks.where((task) => task.status == "Active").toList();
+      case ViewFilter.Completed:
+        return tasks.where((task) => task.status == "Completed").toList();
+      default:
+        return tasks;
+    }
+
+  }
   FutureOr<void> _onCompleteTask(HomeCompleteTask event, Emitter<HomeState> emit) async {
     emit(state.copyWith(status: TaskStatus.loading)); // Set status to loading before completing the task
     final task = event.task;

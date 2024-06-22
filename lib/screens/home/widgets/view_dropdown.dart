@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../bloc/home/home_bloc.dart';
 
-enum ViewFilter { All, Active, Completed, Fault }
+enum ViewFilter { All, Active, Completed}
 
 class ViewDropdown extends StatefulWidget {
   final HomeBloc bloc;

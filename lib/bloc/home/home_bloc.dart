@@ -14,6 +14,7 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeState.initial()) {
     on<HomeLoadTasks>(_onLoadTasks);
+    on<HomeChangeDate>(_onChangeDate);
     on<HomeDeleteTask>(_onDeleteTask);
     on<HomeUpdateTask>(_onUpdateTask);
     on<HomeChangeFilter>(_onChangeFilter);
@@ -38,6 +39,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(state.copyWith(status: TaskStatus.error));
     }
   }
+  FutureOr<void> _onChangeDate(HomeChangeDate event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(date: event.date));
+    List<Task> tasks = await getTasksByDate(event.date);
+    emit(state.copyWith(tasks: tasks));
+  }
+  Future<List<Task>> getTasksByDate(DateTime date) async {
+    final tasks = Hive.box<Task>('tasks').values.toList();
+    return tasks.where((task) {
+      final taskDate = DateTime(task.date.year, task.date.month, task.date.day);
+      final compareDate = DateTime(date.year, date.month, date.day);
+      return taskDate.isAtSameMomentAs(compareDate);
+    }).toList();
+  }
   FutureOr<void> _onDeleteTask(HomeDeleteTask event, Emitter<HomeState> emit) async {
     //emit(state.copyWith(status: TaskStatus.loading,lastDeteledTask: null));
     final task = event.task;
@@ -58,12 +72,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> _onChangeFilter(HomeChangeFilter event, Emitter<HomeState> emit) async {
     emit(state.copyWith(filter: event.filter));
   }
+  // Future<List<Task>> getTaskByFilter(ViewFilter filter){
+  //
+  // }
   FutureOr<void> _onCompleteTask(HomeCompleteTask event, Emitter<HomeState> emit) async {
     emit(state.copyWith(status: TaskStatus.loading)); // Set status to loading before completing the task
     final task = event.task;
     try {
       await task.complete();
-      //await task.save();
+      await task.save();
       final tasks = Hive.box<Task>('tasks').values.toList();
       emit(state.copyWith(tasks: tasks, status: TaskStatus.success)); // Set status to success after updating the task
     } catch (e) {
@@ -75,7 +92,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final task = event.task;
     try {
       await task.undoCompleted();
-      //await task.save();
+      await task.save();
       final tasks = Hive.box<Task>('tasks').values.toList();
       emit(state.copyWith(tasks: tasks, status: TaskStatus.success));
     } catch (e) {

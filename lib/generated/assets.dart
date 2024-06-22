@@ -11,6 +11,7 @@ class Assets {
   static const String homeHomeBloc = 'lib/bloc/home/home_bloc.dart';
   static const String homeHomeEvent = 'lib/bloc/home/home_event.dart';
   static const String homeHomeState = 'lib/bloc/home/home_state.dart';
+  static const String imageLogo = 'assets/image/logo.png';
   static const String libMain = 'lib/main.dart';
   static const String modelTask = 'lib/data/model/task.dart';
   //static const String modelTask.g = 'lib/data/model/task.g.dart';
@@ -19,6 +20,7 @@ class Assets {
   static const String widgetPriorityChoice = 'lib/screens/add_task/widget/priority_choice.dart';
   static const String widgetTimePicker = 'lib/screens/add_task/widget/time_picker.dart';
   static const String widgetTittle = 'lib/screens/add_task/widget/tittle.dart';
+  static const String widgetsPickDateToView = 'lib/screens/home/widgets/pick_date_to_view.dart';
   static const String widgetsTaskCard = 'lib/screens/home/widgets/task_card.dart';
   static const String widgetsTypetaskButton = 'lib/screens/home/widgets/typetask_button.dart';
   static const String widgetsViewDropdown = 'lib/screens/home/widgets/view_dropdown.dart';

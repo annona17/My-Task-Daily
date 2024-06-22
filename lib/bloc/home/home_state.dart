@@ -7,20 +7,22 @@ final class HomeState extends Equatable {
   final TaskStatus status;
   final ViewFilter filter;
   final Task? lastDeteledTask;
-
+  final DateTime? date;
 
   const HomeState({
     required this.tasks,
     required this.status,
     required this.filter,
+    required this.date,
     this.lastDeteledTask,
   });
 
   factory HomeState.initial() {
-    return const HomeState(
+    return HomeState(
       tasks: [],
       status: TaskStatus.initial,
       filter: ViewFilter.All,
+      date : DateTime.now(),
     );
   }
 
@@ -31,11 +33,13 @@ final class HomeState extends Equatable {
     TaskStatus? status,
     ViewFilter? filter,
     Task? lastDeteledTask,
+    DateTime? date,
   }) {
     return HomeState(
       tasks: tasks ?? this.tasks,
       status: status ?? this.status,
       filter: filter ?? this.filter,
+      date: date ?? this.date,
       lastDeteledTask: lastDeteledTask ?? this.lastDeteledTask,
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoapp/screens/home/widgets/pick_date_to_view.dart';
 
 import '../../bloc/home/home_bloc.dart';
 import 'widgets/task_card.dart';
@@ -18,6 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return SafeArea(
       child: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
+          final homeBloc = context.read<HomeBloc>();
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.deepPurple[100],
@@ -46,13 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(8.0),
               child: Column(children: [
                 const SizedBox(height: 10),
-                const Row(
+                Row(
                   children: [
-                    Text("Today",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                    Spacer(),
-                    ViewDropdown(),
+                    Expanded(child: PickDateToView(bloc: homeBloc)),
+                    ViewDropdown(bloc: homeBloc),
                   ],
                 ),
                 Expanded(

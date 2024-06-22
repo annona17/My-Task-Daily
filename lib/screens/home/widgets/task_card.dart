@@ -17,7 +17,7 @@ class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
     if (_isDimissed) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
     return Dismissible(
       key: Key(widget.task.id.toString()),

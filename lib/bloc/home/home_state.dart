@@ -7,7 +7,7 @@ final class HomeState extends Equatable {
   final TaskStatus status;
   final ViewFilter filter;
   final Task? lastDeteledTask;
-  final DateTime? date;
+  final DateTime date;
 
   const HomeState({
     required this.tasks,

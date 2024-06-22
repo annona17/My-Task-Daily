@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+
+import '../../../bloc/home/home_bloc.dart';
 
 enum ViewFilter { All, Active, Completed, Fault }
 
 class ViewDropdown extends StatefulWidget {
-  const ViewDropdown({super.key});
+  final HomeBloc bloc;
+  const ViewDropdown({super.key, required this.bloc});
 
   @override
   State<ViewDropdown> createState() => _ViewDropdownState();
@@ -29,9 +32,11 @@ class _ViewDropdownState extends State<ViewDropdown> {
         );
       }).toList(),
       onChanged: (ViewFilter? value) {
-        setState(() {
-          _view = value!;
-        });
+        // setState(() {
+        //   _view = value!;
+        // });
+        _view = value!;
+        widget.bloc.add(HomeChangeFilter(_view));
       },
     );
   }

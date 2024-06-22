@@ -23,7 +23,12 @@ final class HomeUpdateTask extends HomeEvent {
   @override
   List<Object> get props => [task];
 }
-
+final class HomeChangeDate extends HomeEvent{
+  final DateTime date;
+  const HomeChangeDate(this.date);
+  @override
+  List<Object> get props => [date];
+}
 final class HomeChangeFilter extends HomeEvent {
   final ViewFilter filter;
   const HomeChangeFilter(this.filter);

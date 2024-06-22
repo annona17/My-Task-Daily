@@ -3,17 +3,47 @@ import 'package:flutter/material.dart';
 import '../../../bloc/home/home_bloc.dart';
 import '../../../data/model/task.dart';
 
-class TaskCard extends StatelessWidget {
+class TaskCard extends StatefulWidget {
   final Task task;
   final HomeBloc bloc;
   const TaskCard({super.key, required this.task, required this.bloc});
 
   @override
+  State<TaskCard> createState() => _TaskCardState();
+}
+
+class _TaskCardState extends State<TaskCard> {
+  bool _isDimissed = false;
+  @override
   Widget build(BuildContext context) {
+    if (_isDimissed) {
+      return SizedBox.shrink();
+    }
     return Dismissible(
-      key: const ValueKey("task"),
+      key: Key(widget.task.id.toString()),
       onDismissed: (direction) {
-        bloc.add(HomeDeleteTask(task));
+        if (mounted){
+          setState(() {
+            _isDimissed = true;
+          });
+        }
+        widget.bloc.add(HomeDeleteTask(widget.task));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Task ${widget.task.title} deleted"),
+            action: SnackBarAction(
+              label: "Undo",
+              onPressed: () {
+                if (mounted) {
+                  setState(() {
+                    _isDimissed = false;
+                  });
+                }
+                widget.bloc.add(HomeUndoDelete(widget.task));
+              },
+            ),
+          ),
+        );
       },
       background: Container(
         color: Colors.red[300],
@@ -24,19 +54,19 @@ class TaskCard extends StatelessWidget {
           //Navigator.pushNamed(context, '/add_task');
         },
         child: Card(
-          color: task.colorTask,
+          color: widget.task.colorTask,
           child: Column(
             children: [
               ListTile(
-                title: Text(task.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text(task.description, style: const TextStyle(fontStyle: FontStyle.italic)),
+                title: Text(widget.task.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text(widget.task.description, style: const TextStyle(fontStyle: FontStyle.italic)),
                 trailing: Checkbox(
-                  value: task.status == "Active"? false : true,
+                  value: widget.task.status == "Active"? false : true,
                   onChanged: (bool? value) {
                     if (value == true) {
-                      bloc.add(HomeCompleteTask(task));
+                      widget.bloc.add(HomeCompleteTask(widget.task));
                     } else {
-                      bloc.add(HomeUndoComplete(task));
+                      widget.bloc.add(HomeUndoComplete(widget.task));
                     }
                   },
                 ),
@@ -51,7 +81,7 @@ class TaskCard extends StatelessWidget {
                           color: Colors.deepPurple[100],
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Text(task.priority.toString().split('.').last),
+                        child: Text(widget.task.priority.toString().split('.').last),
                     ),
                     const SizedBox(width: 10),
                     Container(
@@ -63,7 +93,7 @@ class TaskCard extends StatelessWidget {
                       child: Row(
                         children: [
                           const Icon(Icons.timer_outlined),
-                          Text("${task.startTime} - ${task.endTime}"),
+                          Text("${widget.task.startTime} - ${widget.task.endTime}"),
                         ],
                       )
                     ),

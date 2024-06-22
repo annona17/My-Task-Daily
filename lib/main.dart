@@ -10,7 +10,6 @@ import 'screens/add_task/add_task.dart';
 Future <void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TaskAdapter());
-
   Box <Task> box ;
   if (Hive.isBoxOpen('tasks')) {
     box = Hive.box<Task>('tasks');
@@ -27,6 +26,7 @@ Future <void> main() async {
       priority: "high",
       color: Colors.red.withOpacity(0.5).value,
     );
+    await Future.delayed(Duration(seconds: 1));
     var task2 = Task(
       title: 'Task 2',
       description: 'Description 2',
@@ -36,6 +36,7 @@ Future <void> main() async {
       priority: "medium",
       color: Colors.green.withOpacity(0.5).value,
     );
+    await Future.delayed(Duration(seconds: 1));
     var task3 = Task(
       title: 'Task 3',
       description: 'Description 3',
@@ -46,9 +47,10 @@ Future <void> main() async {
       color: Colors.blue.withOpacity(0.5).value,
     );
 
-    await box.add(task1);
-    await box.add(task2);
-    await box.add(task3);
+    await box.put(task1.id, task1);
+    await box.put(task2.id, task2);
+    await Future.delayed(Duration(seconds: 1));
+    await box.put(task3.id, task3);
 
   }
   runApp(
@@ -61,7 +63,7 @@ Future <void> main() async {
               create: (context) => AddTaskBloc(),
             ),
           ],
-          child: MyApp())
+          child: const MyApp())
   );
 }
 final navigatorKey = GlobalKey<NavigatorState>();

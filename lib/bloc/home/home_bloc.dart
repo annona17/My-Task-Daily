@@ -39,35 +39,48 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
   FutureOr<void> _onDeleteTask(HomeDeleteTask event, Emitter<HomeState> emit) async {
+    //emit(state.copyWith(status: TaskStatus.loading,lastDeteledTask: null));
     final task = event.task;
     await task.delete();
+    final updatedTasks = Hive.box<Task>('tasks').values.toList();
     emit(state.copyWith(
-      tasks: state.tasks.where((element) => element.id != task.id).toList(),
+      tasks: updatedTasks,
       lastDeteledTask: task,
     ));
   }
   FutureOr<void> _onUpdateTask(HomeUpdateTask event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(status: TaskStatus.loading));
     final task = event.task;
-    await task.update();
-    final tasks = state.tasks.map((e) => e.id == task.id ? task : e).toList();
+    await task.save();
+    final tasks = Hive.box<Task>('tasks').values.toList();
     emit(state.copyWith(tasks: tasks));
   }
   FutureOr<void> _onChangeFilter(HomeChangeFilter event, Emitter<HomeState> emit) async {
     emit(state.copyWith(filter: event.filter));
   }
   FutureOr<void> _onCompleteTask(HomeCompleteTask event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(status: TaskStatus.loading)); // Set status to loading before completing the task
     final task = event.task;
-    await task.complete();
-    //await task.save();
-    final tasks = state.tasks.map((e) => e.id == task.id ? task : e).toList();
-    emit(state.copyWith(tasks: tasks));
+    try {
+      await task.complete();
+      //await task.save();
+      final tasks = Hive.box<Task>('tasks').values.toList();
+      emit(state.copyWith(tasks: tasks, status: TaskStatus.success)); // Set status to success after updating the task
+    } catch (e) {
+      emit(state.copyWith(status: TaskStatus.error)); // Set status to error if an exception occurs
+    }
   }
   FutureOr<void> _onUndoComplete(HomeUndoComplete event, Emitter<HomeState> emit) async {
+    emit (state.copyWith(status: TaskStatus.loading));
     final task = event.task;
-    await task.undoCompleted();
-    // await task.save();
-    final tasks = state.tasks.map((e) => e.id == task.id ? task : e).toList();
-    emit(state.copyWith(tasks: tasks));
+    try {
+      await task.undoCompleted();
+      //await task.save();
+      final tasks = Hive.box<Task>('tasks').values.toList();
+      emit(state.copyWith(tasks: tasks, status: TaskStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: TaskStatus.error));
+    }
   }
   FutureOr<void> _onUndoDelete(HomeUndoDelete event, Emitter<HomeState> emit) async {
     final task = event.task;

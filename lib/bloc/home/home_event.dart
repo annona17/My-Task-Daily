@@ -56,8 +56,15 @@ final class HomeAddTask extends HomeEvent {
   @override
   List<Object> get props => [];
 }
-final class HomeReloadTask extends HomeEvent {
-  const HomeReloadTask();
+
+final class HomeReset extends HomeEvent {
+  const HomeReset();
+  @override
+  List<Object> get props => [];
+}
+
+final class HomeTickTask extends HomeEvent {
+  const HomeTickTask();
   @override
   List<Object> get props => [];
 }

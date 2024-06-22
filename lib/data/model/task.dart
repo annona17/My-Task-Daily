@@ -7,7 +7,7 @@ part "task.g.dart";
 @HiveType(typeId: 1)
 class Task {
   @HiveField(0)
-  final int id = DateTime.now().millisecondsSinceEpoch;
+  final String id = DateTime.now().millisecondsSinceEpoch.toString();
   @HiveField(1)
   final String title;
   @HiveField(2)
@@ -59,27 +59,19 @@ class Task {
   }
 
   delete() {
-    Hive.box<Task>("task").delete(this);
+    Hive.box<Task>('tasks').delete(id);
   }
-
-  update() {
-    Hive.box<Task>("task").putAt(Hive.box<Task>("task").keyAt(Hive.box<Task>("task").values.toList().indexWhere((element) => element == this)), this);
-  }
-
-  complete() {
-    status = "Completed";
-  }
-
   undoDeleted() {
     status = "Active";
   }
-
-  save() {
-    Hive.box<Task>("tasks").add(this);
+  complete() {
+    status = "Completed";
   }
-
   undoCompleted() {
     status = "Active";
+  }
+  save() {
+    Hive.box<Task>('tasks').put(id, this);
   }
 
 }

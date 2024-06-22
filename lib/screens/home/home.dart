@@ -18,7 +18,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return SafeArea(
       child: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
-          final homeBloc = context.read<HomeBloc>();
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.deepPurple[100],
@@ -57,25 +56,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
                 Expanded(
-                  child: state.tasks.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: state.tasks.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TaskCard(
-                                  task: state.tasks[index], bloc: homeBloc),
-                            );
-                          },
-                        )
-                      : const Center(child: Text("Empty")),
+                  child: state.status == TaskStatus.loading
+                      ? const Center(child: CircularProgressIndicator())
+                      : state.tasks.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: state.tasks.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TaskCard(
+                                    task: state.tasks[index],
+                                    bloc: context.read<HomeBloc>(),
+                                    key: ValueKey(state.tasks[index].id),
+                                ),
+                              );
+                            },
+                          )
+                        : const Center(child: Text("Empty")),
                 ),
               ]),
             ),
             floatingActionButton: FloatingActionButton(
                 child: const Icon(Icons.add),
                 onPressed: () {
-                  homeBloc.add(const HomeAddTask());
+                  context.read<HomeBloc>().add(const HomeAddTask());
                 }),
             floatingActionButtonLocation: FloatingActionButtonLocation
                 .endFloat, // This line positions the button at the bottom right corner.

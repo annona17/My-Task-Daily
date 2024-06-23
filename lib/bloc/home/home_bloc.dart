@@ -27,13 +27,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<FutureOr<void>> _onLoadTasks(HomeLoadTasks event, Emitter<HomeState> emit) async {
     emit(state.copyWith(status: TaskStatus.loading));
     try {
-      final Box<Task> taskBox;
-      if (Hive.isBoxOpen('tasks')) {
-        taskBox = Hive.box<Task>('tasks');
-      } else {
-        taskBox = await Hive.openBox<Task>('tasks');
-      }
-      final tasks = taskBox.values.toList();
+      List<Task> tasks = await getTasksByDate(state.date);
+      tasks = await getTaskByFilter(state.filter, tasks);
       emit(state.copyWith(tasks: tasks, status: TaskStatus.success));
     } catch (e) {
       emit(state.copyWith(status: TaskStatus.error));
@@ -54,13 +49,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }).toList();
   }
   FutureOr<void> _onDeleteTask(HomeDeleteTask event, Emitter<HomeState> emit) async {
-    //emit(state.copyWith(status: TaskStatus.loading,lastDeteledTask: null));
     final task = event.task;
     await task.delete();
-    final updatedTasks = Hive.box<Task>('tasks').values.toList();
+    final updatedTasks = state.tasks.where((t)=> t.id != task.id).toList();
     emit(state.copyWith(
       tasks: updatedTasks,
       lastDeteledTask: task,
+    ));
+  }
+  FutureOr<void> _onUndoDelete(HomeUndoDelete event, Emitter<HomeState> emit) async {
+    final task = event.task;
+    await task.undoDeleted();
+    await task.save();
+    emit(state.copyWith(
+      tasks: [...state.tasks, task],
+      lastDeteledTask: null,
     ));
   }
   FutureOr<void> _onUpdateTask(HomeUpdateTask event, Emitter<HomeState> emit) async {
@@ -72,7 +75,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
   FutureOr<void> _onChangeFilter(HomeChangeFilter event, Emitter<HomeState> emit) async {
     emit(state.copyWith(filter: event.filter));
-    List<Task> tasks = await getTasksByDate(state.date);
+    List<Task> tasks = state.tasks;
     tasks = await getTaskByFilter(event.filter, tasks);
     emit(state.copyWith(tasks: tasks, filter: event.filter));
   }
@@ -93,7 +96,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       await task.complete();
       await task.save();
-      final tasks = Hive.box<Task>('tasks').values.toList();
+      final tasks = state.tasks.map((t) => t.id == task.id ? task : t).toList();
       emit(state.copyWith(tasks: tasks, status: TaskStatus.success)); // Set status to success after updating the task
     } catch (e) {
       emit(state.copyWith(status: TaskStatus.error)); // Set status to error if an exception occurs
@@ -105,23 +108,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       await task.undoCompleted();
       await task.save();
-      final tasks = Hive.box<Task>('tasks').values.toList();
+      final tasks = state.tasks.map((t) => t.id == task.id ? task : t).toList();
       emit(state.copyWith(tasks: tasks, status: TaskStatus.success));
     } catch (e) {
       emit(state.copyWith(status: TaskStatus.error));
     }
   }
-  FutureOr<void> _onUndoDelete(HomeUndoDelete event, Emitter<HomeState> emit) async {
-    final task = event.task;
-    await task.undoDeleted();
-    emit(state.copyWith(
-      tasks: [...state.tasks, task],
-      lastDeteledTask: null,
-    ));
-  }
+
   FutureOr<void> _onAddTask(HomeAddTask event, Emitter<HomeState> emit) async {
     navigatorKey.currentState!.pushNamed('/add_task');
   }
+
 }
 
 

@@ -18,6 +18,7 @@ Future <void> main() async {
   }
   if (box.isEmpty) {
     var task1 = Task(
+      id: "1",
       title: 'Task 1',
       description: 'Description 1',
       date: DateTime.now(),
@@ -28,6 +29,7 @@ Future <void> main() async {
     );
     await Future.delayed(Duration(seconds: 1));
     var task2 = Task(
+      id: "2",
       title: 'Task 2',
       description: 'Description 2',
       date: DateTime.now(),
@@ -38,6 +40,7 @@ Future <void> main() async {
     );
     await Future.delayed(Duration(seconds: 1));
     var task3 = Task(
+      id: "3",
       title: 'Task 3',
       description: 'Description 3',
       date: DateTime.now(),
@@ -49,7 +52,6 @@ Future <void> main() async {
 
     await box.put(task1.id, task1);
     await box.put(task2.id, task2);
-    await Future.delayed(Duration(seconds: 1));
     await box.put(task3.id, task3);
 
   }

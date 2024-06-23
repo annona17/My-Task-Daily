@@ -75,7 +75,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
   FutureOr<void> _onChangeFilter(HomeChangeFilter event, Emitter<HomeState> emit) async {
     emit(state.copyWith(filter: event.filter));
-    List<Task> tasks = state.tasks;
+    List<Task> tasks = await getTasksByDate(state.date);
     tasks = await getTaskByFilter(event.filter, tasks);
     emit(state.copyWith(tasks: tasks, filter: event.filter));
   }

@@ -65,6 +65,7 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
     String startTimeString = '${state.startTime.hour.toString().padLeft(2, '0')}:${state.startTime.minute.toString().padLeft(2, '0')}';
     String endTimeString = '${state.endTime.hour.toString().padLeft(2, '0')}:${state.endTime.minute.toString().padLeft(2, '0')}';
     _task = Task(
+      id: DateTime.now().toString(),
       title: state.title,
       description: state.description,
       date: state.date,

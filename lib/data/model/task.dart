@@ -7,7 +7,7 @@ part "task.g.dart";
 @HiveType(typeId: 1)
 class Task {
   @HiveField(0)
-  final String id = DateTime.now().millisecondsSinceEpoch.toString();
+  final String id;
   @HiveField(1)
   final String title;
   @HiveField(2)
@@ -26,6 +26,7 @@ class Task {
   String status = "Active";
 
   Task({
+    required this.id,
     required this.title,
     required this.description,
     required this.date,
@@ -37,6 +38,7 @@ class Task {
 
   Task.from(Task other)
     : this (
+      id: other.id,
       title: other.title,
       description: other.description,
       date: other.date,

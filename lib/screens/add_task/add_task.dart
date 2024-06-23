@@ -22,7 +22,7 @@ class _AddTaskState extends State<AddTask> {
       appBar: AppBar(
         title: const Text('Add Task'),
       ),
-      body: SingleChildScrollView( // Add SingleChildScrollView here
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

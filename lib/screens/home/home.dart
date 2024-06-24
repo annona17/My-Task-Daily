@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   context.read<HomeBloc>().add(const HomeAddTask());
                 }),
             floatingActionButtonLocation: FloatingActionButtonLocation
-                .endFloat, // This line positions the button at the bottom right corner.
+                .endFloat,
           );
         },
       ),

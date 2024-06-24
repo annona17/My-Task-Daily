@@ -27,7 +27,7 @@ Future <void> main() async {
       priority: "high",
       color: Colors.red.withOpacity(0.5).value,
     );
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     var task2 = Task(
       id: "2",
       title: 'Task 2',
@@ -38,7 +38,7 @@ Future <void> main() async {
       priority: "medium",
       color: Colors.green.withOpacity(0.5).value,
     );
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     var task3 = Task(
       id: "3",
       title: 'Task 3',

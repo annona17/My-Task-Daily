@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../bloc/addtask/addtask_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,8 +19,10 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepPurple[100],
         title: const Text('Add Task'),
       ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -33,7 +34,7 @@ class _AddTaskState extends State<AddTask> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TitleDetail(title: "Tittle", icon: Icon(Icons.title)),
+                      const TitleDetail(title: "Title", icon: Icon(Icons.title)),
                       TextField(
                         onChanged: (value) => bloc.add(AddTaskChangeTittle(value)),
                         decoration: const InputDecoration(
@@ -41,9 +42,7 @@ class _AddTaskState extends State<AddTask> {
                           hintText: 'Enter Title',
                         ),
                       ),
-                      const SizedBox(height: 10), // Add spacing between elements
                       const TitleDetail(title: "Description", icon: Icon(Icons.create_rounded)),
-                      const SizedBox(height: 10),
                       TextField(
                         onChanged: (value) => bloc.add(AddTaskChangeDescription(value)),
                         minLines: 5,
@@ -53,25 +52,20 @@ class _AddTaskState extends State<AddTask> {
                           hintText: 'Enter Description',
                         ),
                       ),
-                      const SizedBox(height: 10),
                       const TitleDetail(title: "Date", icon: Icon(Icons.date_range)),
-                      const SizedBox(height: 10),
                       DatePicker(bloc: bloc),
-                      const SizedBox(height: 10),
                       const TitleDetail(title: "Time", icon: Icon(Icons.access_time)),
-                      const SizedBox(height: 10),
                       Row(
                         children: [
                           Expanded(child: TimePicker(isStartTime: true, bloc: bloc)),
-                          const SizedBox(width: 10),
-                          const Text('--'),
-                          const SizedBox(width: 10),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            child: Text('--'),
+                          ),
                           Expanded(child: TimePicker(isStartTime: false, bloc: bloc)),
                         ],
                       ),
-                      const SizedBox(height: 10),
                       Priority(bloc: bloc),
-                      const SizedBox(height: 10),
                       ColorTask(bloc: bloc),
                       const SizedBox(height: 20),
                       Center(

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +15,7 @@ part 'addtask_state.dart';
 
 class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
   late Task _task;
-  AddTaskBloc({Task}) : super(AddTaskState.initial()) {
+  AddTaskBloc({task}) : super(AddTaskState.initial()) {
     on<AddTaskChangeTittle>(_onChangeTitle);
     on<AddTaskChangeDescription>(_onChangeDescription);
     on<AddTaskChangeDate>(_onChangeDate);
@@ -28,7 +27,7 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
   }
   FutureOr<void> _onChangeTitle(
       AddTaskChangeTittle event, Emitter<AddTaskState> emit) {
-    emit(state.copyWith(tittle: event.tittle));
+    emit(state.copyWith(title: event.title));
   }
 
   FutureOr<void> _onChangeDescription(
@@ -86,7 +85,7 @@ class AddTaskBloc extends Bloc<AddTaskEvent, AddTaskState> {
   // luu vao hive
   void saveTask() {
     Hive.box<Task>('tasks').put(_task.id, _task);
-    print('Task added successfully!');
+    //print('Task added successfully!');
   }
 }
 

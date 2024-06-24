@@ -7,19 +7,22 @@ class TitleDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        icon,
-        SizedBox(width: 5),
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
+      child: Row(
+        children: [
+          icon,
+          SizedBox(width: 5),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

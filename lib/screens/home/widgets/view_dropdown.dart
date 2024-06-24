@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../bloc/home/home_bloc.dart';
 
-enum ViewFilter { All, Active, Completed}
+enum ViewFilter { all, active, completed}
 
 class ViewDropdown extends StatefulWidget {
   final HomeBloc bloc;
@@ -13,7 +13,7 @@ class ViewDropdown extends StatefulWidget {
 }
 
 class _ViewDropdownState extends State<ViewDropdown> {
-  ViewFilter _view = ViewFilter.All;
+  ViewFilter _view = ViewFilter.all;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class _ViewDropdownState extends State<ViewDropdown> {
         return DropdownMenuItem<ViewFilter>(
           value: value,
           child: Text(
-              value.toString().split('.').last,
+              value.toString().split('.').last.inCaps,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 13,
@@ -32,12 +32,14 @@ class _ViewDropdownState extends State<ViewDropdown> {
         );
       }).toList(),
       onChanged: (ViewFilter? value) {
-        // setState(() {
-        //   _view = value!;
-        // });
         _view = value!;
         widget.bloc.add(HomeChangeFilter(_view));
       },
     );
   }
 }
+
+extension CapExtension on String {
+  String get inCaps => '${this[0].toUpperCase()}${substring(1)}';
+}
+

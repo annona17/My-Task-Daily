@@ -19,9 +19,9 @@ final class HomeState extends Equatable {
 
   factory HomeState.initial() {
     return HomeState(
-      tasks: [],
+      tasks: const [],
       status: TaskStatus.initial,
-      filter: ViewFilter.All,
+      filter: ViewFilter.all,
       date : DateTime.now(),
     );
   }

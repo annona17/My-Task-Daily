@@ -3,7 +3,7 @@ import '../../../bloc/addtask/addtask_bloc.dart';
 
 class DatePicker extends StatefulWidget {
   final AddTaskBloc bloc;
-  DatePicker({super.key, required this.bloc});
+  const DatePicker({super.key, required this.bloc});
 
   @override
   State<DatePicker> createState() => _DatePickerState();

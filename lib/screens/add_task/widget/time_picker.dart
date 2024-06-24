@@ -4,7 +4,7 @@ import '../../../bloc/addtask/addtask_bloc.dart';
 class TimePicker extends StatefulWidget {
   final bool isStartTime; // true if this is the start time, false if this is the end time
   final AddTaskBloc bloc;
-  TimePicker({super.key, required this.isStartTime, required this.bloc});
+  const TimePicker({super.key, required this.isStartTime, required this.bloc});
 
   @override
   State<TimePicker> createState() => _TimePickerState();

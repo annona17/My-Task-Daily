@@ -81,9 +81,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
   Future<List<Task>> getTaskByFilter(ViewFilter filter, List<Task> tasks) async {
     switch (filter) {
-      case ViewFilter.Active:
+      case ViewFilter.active:
         return tasks.where((task) => task.status == "Active").toList();
-      case ViewFilter.Completed:
+      case ViewFilter.completed:
         return tasks.where((task) => task.status == "Completed").toList();
       default:
         return tasks;

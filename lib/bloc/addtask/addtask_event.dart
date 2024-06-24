@@ -5,10 +5,10 @@ sealed class AddTaskEvent extends Equatable{
 }
 
 final class AddTaskChangeTittle extends AddTaskEvent {
-  final String tittle;
-  const AddTaskChangeTittle(this.tittle);
+  final String title;
+  const AddTaskChangeTittle(this.title);
   @override
-  List<Object> get props => [tittle];
+  List<Object> get props => [title];
 }
 
 final class AddTaskChangeDescription extends AddTaskEvent {

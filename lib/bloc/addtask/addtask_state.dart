@@ -42,7 +42,7 @@ class AddTaskState extends Equatable{
   List<Object> get props => [title, description, date, startTime, endTime, priority, status, color];
 
   AddTaskState copyWith({
-    String? tittle,
+    String? title,
     String? description,
     DateTime? date,
     TimeOfDay? startTime,
@@ -54,7 +54,7 @@ class AddTaskState extends Equatable{
     bool? isCompleted
   }) {
     return AddTaskState(
-      title: tittle ?? this.title,
+      title: title ?? this.title,
       description: description ?? this.description,
       date: date ?? this.date,
       startTime: startTime ?? this.startTime,
